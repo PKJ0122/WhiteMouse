@@ -32,10 +32,10 @@ public class AdManager : Singleton<AdManager>
         RequestBanner();
     }
 
-    public void AdShow()
-    {
-        StartCoroutine(C_AdShow());
-    }
+    //public void AdShow()
+    //{
+    //    StartCoroutine(C_AdShow());
+    //}
 
     void RequestBanner()
     {
@@ -54,41 +54,41 @@ public class AdManager : Singleton<AdManager>
 
     YieldInstruction _delay = new WaitForSeconds(DELAY);
 
-    IEnumerator C_AdShow()
-    {
-        PopUpUI PopUpUi = UIManager.Instance.Get<PopUpUI>();
-        UIBase LodingUi = UIManager.Instance.Get<LodingUI>();
-        LodingUi.Show();
+    //IEnumerator C_AdShow()
+    //{
+    //    PopUpUI PopUpUi = UIManager.Instance.Get<PopUpUI>();
+    //    UIBase LodingUi = UIManager.Instance.Get<LodingUI>();
+    //    LodingUi.Show();
 
-        if (_rewardedAd != null)
-        {
-            _rewardedAd.Destroy();
-        }
-        _rewardedAd = new RewardedAd(_rewardAdId);
-        _rewardedAd.OnAdClosed += (object sender, EventArgs args) =>
-        {
-            PopUpUi.Show("Thank you.\r\nI Love You <sprite=2>.");
-        };
-        AdRequest request = new AdRequest.Builder().Build();
-        RewardedAd.LoadAd(request);
+    //    if (_rewardedAd != null)
+    //    {
+    //        _rewardedAd.Destroy();
+    //    }
+    //    _rewardedAd = new RewardedAd(_rewardAdId);
+    //    _rewardedAd.OnAdClosed += (object sender, EventArgs args) =>
+    //    {
+    //        PopUpUi.Show("Thank you.\r\nI Love You <sprite=2>.");
+    //    };
+    //    AdRequest request = new AdRequest.Builder().Build();
+    //    RewardedAd.LoadAd(request);
 
-        float timeout = 10f;
-        float elapsedTime = 0f;
+    //    float timeout = 10f;
+    //    float elapsedTime = 0f;
 
-        while (elapsedTime < timeout)
-        {
-            if (_rewardedAd.IsLoaded())
-            {
-                LodingUi.Hide();
-                _rewardedAd.Show();
-                yield break;
-            }
+    //    while (elapsedTime < timeout)
+    //    {
+    //        if (_rewardedAd.IsLoaded())
+    //        {
+    //            LodingUi.Hide();
+    //            _rewardedAd.Show();
+    //            yield break;
+    //        }
 
-            yield return _delay;
-            elapsedTime += DELAY;
-        }
+    //        yield return _delay;
+    //        elapsedTime += DELAY;
+    //    }
 
-        LodingUi.Hide();
-        PopUpUi.Show("Fail.");
-    }
+    //    LodingUi.Hide();
+    //    PopUpUi.Show("Fail.");
+    //}
 }
