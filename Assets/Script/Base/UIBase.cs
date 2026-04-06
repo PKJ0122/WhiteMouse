@@ -27,7 +27,7 @@ public class UIBase : MonoBehaviour
         _graphicRaycaster = GetComponent<GraphicRaycaster>();
         _eventSystem = EventSystem.current;
 
-        UIManager.Instance.Register(this);
+        //UIManager.Instance.Register(this);
     }
 
     public virtual void Show()
@@ -35,7 +35,7 @@ public class UIBase : MonoBehaviour
         if (_canvas.enabled) return;
 
         _canvas.enabled = true;
-        UIManager.Instance.PushUI(this);
+        //UIManager.Instance.PushUI(this);
     }
 
     public virtual void Hide()
@@ -43,6 +43,6 @@ public class UIBase : MonoBehaviour
         if (!_canvas.enabled) return;
 
         _canvas.enabled = false;
-        UIManager.Instance.PopUI(this);
+        //UIManager.Instance.PopUI(this);
     }
 }
