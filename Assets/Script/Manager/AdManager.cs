@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class AdManager : Singleton<AdManager>
+public class AdManager : SingletonMono<AdManager>
 {
     BannerView _bannerView;
     public BannerView BannerView => _bannerView;

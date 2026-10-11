@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TradeManager : Singleton<TradeManager>
+public class TradeManager : SingletonMono<TradeManager>
 {
 
 }

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Setting : Singleton<Setting>
+public class Setting : SingletonMono<Setting>
 {
     public const int TRUE = 1;
 
