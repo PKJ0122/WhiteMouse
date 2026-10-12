@@ -2,11 +2,11 @@ using UnityEngine;
 
 public static class CustomerFactory
 {
-    public static Customer CreateCustomer(CustomerKind customerKind)
+    public static Customer CreateCustomer(CustomerOrderForm customerOrderForm)
     {
         Customer customer = null;
-
-        switch (customerKind)
+        
+        switch (customerOrderForm.CustomerKind)
         {
             case CustomerKind.Seller:
                 break;
