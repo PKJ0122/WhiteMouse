@@ -2,9 +2,6 @@ using UnityEngine;
 
 public static class ItemFactory
 {
-
-
-
     public static Item CreateItem(CustomerKind customerKind)
     {
         Item customer = null;

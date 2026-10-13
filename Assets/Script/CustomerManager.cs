@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class CustomerManager : SingletonMono<CustomerManager>
+public class CustomerManager : Singleton<CustomerManager>
 {
-    TradeState _currentTradeState;
-
     public event Action<List<Customer>> OnCustomerListChanged;
 
     CustomerDatas _customerDatas;
@@ -68,6 +66,6 @@ public class CustomerManager : SingletonMono<CustomerManager>
 
     int GetTryCustomerLevelData(int customerId)
     {
-        return PlayerData.Instance.CustomerSaveDataDic.ContainsKey(customerId) ? PlayerData.Instance.CustomerSaveDataDic[customerId].Level : 1;
+        return PlayerData.Instance.CustomerSaveDataDic.TryGetValue(customerId, out var data) ? data.Level : 1;
     }
 }

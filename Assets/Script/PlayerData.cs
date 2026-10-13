@@ -5,6 +5,10 @@ using UnityEngine;
 [Serializable]
 public class PlayerData : Singleton<PlayerData>
 {
+    #region Inventory
+    public Item[] Inventory;
+    #endregion
+
     #region CustomerSavaDatas
     public CustomerSaveData[] CustomerSaveDatas;
 
