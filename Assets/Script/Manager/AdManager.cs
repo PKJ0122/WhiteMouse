@@ -1,18 +1,13 @@
 using GoogleMobileAds.Api;
-using System;
-using System.Collections;
-using UnityEngine;
+using System.Threading.Tasks;
 
 public class AdManager : SingletonMono<AdManager>
 {
-    BannerView _bannerView;
-    public BannerView BannerView => _bannerView;
-
     RewardedAd _rewardedAd;
-    public RewardedAd RewardedAd => _rewardedAd;
+    BannerView _bannerView;
 
-    string _bannerViewId;
     string _rewardAdId;
+    string _bannerViewId;
 
 
     protected override void Awake()
@@ -22,73 +17,77 @@ public class AdManager : SingletonMono<AdManager>
         _rewardAdId = "adUnitId";
         _bannerViewId = "adUnitId";
 #else
-        _rewardAdId = "ca-app-pub-5639813524802030/9769699335";
-        _bannerViewId = "ca-app-pub-5639813524802030/2555460272";
+                _rewardAdId = "ca-app-pub-5639813524802030/7365691916";
+                _bannerViewId = "ca-app-pub-5639813524802030/5688069150";
 #endif
 
         MobileAds.Initialize(initStatus => { });
 
-        DontDestroyOnLoad(this);
         RequestBanner();
     }
 
-    //public void AdShow()
-    //{
-    //    StartCoroutine(C_AdShow());
-    //}
+    public async Task<AdShowResult> LoadAndShowAd()
+    {
+        TaskCompletionSource<bool> loadTcs = new();
+        AdRequest adRequest = new();
+
+        RewardedAd.Load(_rewardAdId, adRequest, (ad, error) =>
+        {
+            if (error != null || ad == null)
+            {
+                _rewardedAd = null;
+                loadTcs.SetResult(false);
+                return;
+            }
+
+            _rewardedAd = ad;
+            loadTcs.SetResult(true);
+        });
+
+        bool isLoadSuccess = await loadTcs.Task;
+
+        if (!isLoadSuccess)
+        {
+            return AdShowResult.Failed;
+        }
+
+        TaskCompletionSource<AdShowResult> showTcs = new();
+
+        RegisterAdEventHandlers(_rewardedAd, showTcs);
+
+        _rewardedAd.Show(reward =>
+        {
+            showTcs.TrySetResult(AdShowResult.Success);
+        });
+
+        AdShowResult result = await showTcs.Task;
+
+        _rewardedAd.Destroy();
+        _rewardedAd = null;
+
+        return result;
+    }
+
+    private void RegisterAdEventHandlers(RewardedAd ad, TaskCompletionSource<AdShowResult> showTcs)
+    {
+        ad.OnAdFullScreenContentFailed += (error) =>
+        {
+            showTcs.TrySetResult(AdShowResult.Failed);
+        };
+
+        ad.OnAdFullScreenContentClosed += () =>
+        {
+            showTcs.TrySetResult(AdShowResult.Canceled);
+        };
+    }
 
     void RequestBanner()
     {
-        //if (_bannerView != null)
-        //{
-        //    _bannerView.Destroy();
-        //}
-        //AdSize adSize = AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(AdSize.FullWidth);
-        //_bannerView = new BannerView(_bannerViewId, adSize, AdPosition.Bottom);
+        _bannerView?.Destroy();
+        AdSize adSize = AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(AdSize.FullWidth);
+        _bannerView = new BannerView(_bannerViewId, adSize, AdPosition.Bottom);
 
-        //AdRequest request = new AdRequest.Builder().Build();
-        //BannerView.LoadAd(request);
+        AdRequest request = new();
+        _bannerView.LoadAd(request);
     }
-
-    const float DELAY = 1f;
-
-    YieldInstruction _delay = new WaitForSeconds(DELAY);
-
-    //IEnumerator C_AdShow()
-    //{
-    //    PopUpUI PopUpUi = UIManager.Instance.Get<PopUpUI>();
-    //    UIBase LodingUi = UIManager.Instance.Get<LodingUI>();
-    //    LodingUi.Show();
-
-    //    if (_rewardedAd != null)
-    //    {
-    //        _rewardedAd.Destroy();
-    //    }
-    //    _rewardedAd = new RewardedAd(_rewardAdId);
-    //    _rewardedAd.OnAdClosed += (object sender, EventArgs args) =>
-    //    {
-    //        PopUpUi.Show("Thank you.\r\nI Love You <sprite=2>.");
-    //    };
-    //    AdRequest request = new AdRequest.Builder().Build();
-    //    RewardedAd.LoadAd(request);
-
-    //    float timeout = 10f;
-    //    float elapsedTime = 0f;
-
-    //    while (elapsedTime < timeout)
-    //    {
-    //        if (_rewardedAd.IsLoaded())
-    //        {
-    //            LodingUi.Hide();
-    //            _rewardedAd.Show();
-    //            yield break;
-    //        }
-
-    //        yield return _delay;
-    //        elapsedTime += DELAY;
-    //    }
-
-    //    LodingUi.Hide();
-    //    PopUpUi.Show("Fail.");
-    //}
 }
