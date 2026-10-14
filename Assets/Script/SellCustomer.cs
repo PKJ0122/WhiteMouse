@@ -2,10 +2,10 @@ public sealed class SellCustomer : Customer
 {
     public SellCustomer(
         int customerId,
-        int itemId,
+        Item item,
         int askingPrice,
         int acceptablePrice)
-        : base(customerId, itemId, askingPrice, acceptablePrice)
+        : base(customerId, item, askingPrice, acceptablePrice)
     {
     }
 

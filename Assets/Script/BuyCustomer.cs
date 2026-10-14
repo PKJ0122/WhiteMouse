@@ -2,10 +2,10 @@
 {
     public BuyCustomer(
         int customerId,
-        int itemId,
+        Item item,
         int askingPrice,
         int acceptablePrice)
-        : base(customerId, itemId, askingPrice, acceptablePrice)
+        : base(customerId, item, askingPrice, acceptablePrice)
     {
     }
 

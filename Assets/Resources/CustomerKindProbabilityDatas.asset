@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f560cbaae145a484b90e19ffb88693e3, type: 3}
   m_Name: CustomerKindProbabilityDatas
   m_EditorClassIdentifier: Assembly-CSharp::CustomerKindProbabilityDatas
-  customerKindProbabilityDatas: []
+  customerKindProbabilityDatas:
+  - customerKind: 0
+    probability: 50
+  - customerKind: 1
+    probability: 50

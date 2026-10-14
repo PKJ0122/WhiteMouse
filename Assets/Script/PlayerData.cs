@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerData : Singleton<PlayerData>
 {
     #region Inventory
-    public Item[] Inventory;
+    public List<Item> Inventory;
     #endregion
 
     #region CustomerSavaDatas

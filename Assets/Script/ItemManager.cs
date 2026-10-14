@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public static class ItemManager
+public class ItemManager : Singleton<ItemManager>
 {
     static ItemDatas s_itemDatas;
     static RarityProbabillityDatas s_rarityProbabillity;
@@ -12,12 +12,49 @@ public static class ItemManager
     static int s_lastCustmerLevel = -1;
     static float s_maxNum;
 
-    public static Item CreateItem()
+    public Item CreateItem(CustomerOrderForm customerOrderForm)
     {
-        return new Item();
+        Item customer = null;
+
+        switch (customerOrderForm.CustomerKind)
+        {
+            case CustomerKind.Seller:
+                customer = CreateSellerItem(customerOrderForm);
+                break;
+            case CustomerKind.Buyer:
+                customer = CreateBuyerItem();
+                break;
+        }
+
+        return customer;
     }
 
-    static ItemData RandomItemKind()
+    Item CreateSellerItem(CustomerOrderForm customerOrderForm)
+    {
+        ItemData itemData = RandomItemKind();
+        ItemRarity itemRarity = RandomRarity(customerOrderForm.CustomerLevel);
+
+        Item item = new(itemData,
+                        itemRarity,
+                        RandomDurability());
+
+        return item;
+    }
+
+    Item CreateBuyerItem()
+    {
+        List<Item> inventory = PlayerData.Instance.Inventory;
+        int inventoryMaxCount = inventory.Count;
+
+        if (inventoryMaxCount == 0) return null;
+
+        int randomNum = Random.Range(0, inventoryMaxCount);
+        Item item = inventory[randomNum];
+
+        return item;
+    }
+
+    ItemData RandomItemKind()
     {
         int maxProbabilitynNum = s_itemDatas.ItemDataDic.Count;
         int randomNum = Random.Range(0, maxProbabilitynNum);
@@ -27,7 +64,7 @@ public static class ItemManager
         return randomItemData;
     }
 
-    static ItemRarity RandomRarity(int level)
+    ItemRarity RandomRarity(int level)
     {
         if (level == 0)
         {
@@ -87,5 +124,10 @@ public static class ItemManager
         }
 
         return itemRarity;
+    }
+
+    int RandomDurability()
+    {
+        return Random.Range(1, 101);
     }
 }

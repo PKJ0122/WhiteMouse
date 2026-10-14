@@ -16,7 +16,7 @@ public class CustomerManager : Singleton<CustomerManager>
         _currentCustomerKindProbabilityDatas = Resources.Load<CustomerKindProbabilityDatas>("CustomerKindProbabilityDatas");
     }
 
-    void CreateCustomer()
+    public Customer CreateCustomer()
     {
         CustomerKind customerKind = RandomCustomerKind();
         
@@ -27,7 +27,12 @@ public class CustomerManager : Singleton<CustomerManager>
                                                   customerId,
                                                   customerLevel);
 
-        Customer customer = CustomerFactory.CreateCustomer(customerOrderForm);
+        Customer customer = CustomerFactory.Instance.CreateCustomer(customerOrderForm);
+        Item item = ItemManager.Instance.CreateItem(customerOrderForm);
+
+        customer.Item = item;
+
+        return customer;
     }
 
     CustomerKind RandomCustomerKind()
