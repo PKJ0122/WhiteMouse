@@ -39,15 +39,15 @@ public class AdManager : SingletonMono<AdManager>
 
     void RequestBanner()
     {
-        if (_bannerView != null)
-        {
-            _bannerView.Destroy();
-        }
-        AdSize adSize = AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(AdSize.FullWidth);
-        _bannerView = new BannerView(_bannerViewId, adSize, AdPosition.Bottom);
+        //if (_bannerView != null)
+        //{
+        //    _bannerView.Destroy();
+        //}
+        //AdSize adSize = AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(AdSize.FullWidth);
+        //_bannerView = new BannerView(_bannerViewId, adSize, AdPosition.Bottom);
 
-        AdRequest request = new AdRequest.Builder().Build();
-        BannerView.LoadAd(request);
+        //AdRequest request = new AdRequest.Builder().Build();
+        //BannerView.LoadAd(request);
     }
 
     const float DELAY = 1f;
